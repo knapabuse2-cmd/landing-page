@@ -21,11 +21,11 @@
             --text-secondary: rgba(255, 255, 255, 0.6);
             --text-muted: rgba(255, 255, 255, 0.35);
             --accent: #00ff88;
-            --accent-secondary: #00d4ff;
+            --accent-secondary: #c084fc;
             --accent-purple: #a855f7;
             --red: #ff3366;
             --green: #00ff88;
-            --gradient-main: linear-gradient(135deg, #00ff88 0%, #00d4ff 50%, #a855f7 100%);
+            --gradient-main: linear-gradient(135deg, #00ff88 0%, #a855f7 100%);
             --gradient-dark: linear-gradient(180deg, #000000 0%, #0a0a0f 100%);
         }
 
@@ -1165,8 +1165,10 @@
         /* Team Section */
         .team-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 24px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+            max-width: 900px;
+            margin: 0 auto;
         }
 
         .team-card {
@@ -1774,28 +1776,20 @@
             </div>
             <div class="team-grid">
                 <div class="team-card reveal">
-                    <div class="team-avatar">👨‍💻</div>
-                    <h3 class="team-name">Alex</h3>
-                    <div class="team-role">Lead Developer</div>
-                    <p class="team-desc">System architecture, core engine, API integrations</p>
+                    <div class="team-avatar">
+                        <svg viewBox="0 0 24 24" fill="currentColor" style="width:50px;height:50px;color:#000"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                    </div>
+                    <h3 class="team-name">Lead Architect</h3>
+                    <div class="team-role">Lead Developer & System Architect</div>
+                    <p class="team-desc">Crypto trader with a 4-year track record of profitability, driven by statistical precision and long-range discipline. Shadow Protocol — Lead Architect & Developer.</p>
                 </div>
                 <div class="team-card reveal">
-                    <div class="team-avatar">📈</div>
-                    <h3 class="team-name">Mike</h3>
-                    <div class="team-role">Quant Developer</div>
-                    <p class="team-desc">ICT/SMC implementation, pattern algorithms</p>
-                </div>
-                <div class="team-card reveal">
-                    <div class="team-avatar">⚙️</div>
-                    <h3 class="team-name">Dan</h3>
-                    <div class="team-role">Backend Engineer</div>
-                    <p class="team-desc">Data pipelines, position tracking, optimization</p>
-                </div>
-                <div class="team-card reveal">
-                    <div class="team-avatar">🚀</div>
-                    <h3 class="team-name">Sam</h3>
-                    <div class="team-role">DevOps</div>
-                    <p class="team-desc">Deployment, monitoring, infrastructure</p>
+                    <div class="team-avatar">
+                        <svg viewBox="0 0 24 24" fill="currentColor" style="width:50px;height:50px;color:#000"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg>
+                    </div>
+                    <h3 class="team-name">Strategy Lead</h3>
+                    <div class="team-role">Funded Trader & Quant Strategist</div>
+                    <p class="team-desc">Funded trader with 5+ years of consistent profitable experience across FX and crypto. Leads algorithmic frameworks, liquidity-driven models, and institutional trading methodologies. Oversees risk structures and execution logic.</p>
                 </div>
             </div>
         </div>
