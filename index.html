@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Shadow Protocol — Smart Money Detection Engine</title>
 
     <!-- SEO Meta Tags -->
@@ -38,6 +38,16 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        /* Prevent horizontal scroll and zoom issues */
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            max-width: 100vw;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            touch-action: manipulation;
         }
 
         :root {
@@ -2435,6 +2445,48 @@
         @media (max-width: 768px) {
             input, select, textarea {
                 font-size: 16px !important;
+            }
+
+            /* Fix ticker on mobile */
+            .ticker-wrap {
+                height: 36px;
+            }
+
+            .ticker-item {
+                padding: 0 16px;
+                font-size: 11px;
+            }
+
+            /* Fix modal on mobile */
+            .modal-overlay {
+                padding: 16px;
+                align-items: flex-end;
+            }
+
+            .modal {
+                max-height: 85vh;
+                overflow-y: auto;
+                margin-bottom: 16px;
+                border-radius: 20px 20px 20px 20px;
+            }
+
+            /* Fix floating elements overflow */
+            .glow-orb {
+                display: none;
+            }
+
+            .floating-icons {
+                display: none;
+            }
+
+            /* Ensure content doesn't overflow */
+            .hero, .section, .container {
+                overflow: hidden;
+            }
+
+            /* Fix CTA section */
+            .cta-title {
+                font-size: 28px;
             }
         }
 
