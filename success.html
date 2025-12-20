@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Processing — Shadow Protocol</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #000000;
+            --bg-card: rgba(255, 255, 255, 0.02);
+            --border: rgba(255, 255, 255, 0.06);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.6);
+            --accent: #00ff88;
+            --accent-purple: #a855f7;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .success-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 48px 32px;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 40px;
+        }
+
+        .pending-icon {
+            background: rgba(168, 85, 247, 0.1);
+            border-color: var(--accent-purple);
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .promo-section {
+            background: rgba(0, 255, 136, 0.05);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .promo-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        .promo-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent);
+            background: rgba(0, 0, 0, 0.3);
+            padding: 16px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .promo-code:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+        }
+
+        .promo-hint {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 12px;
+        }
+
+        .instructions {
+            text-align: left;
+            margin-bottom: 32px;
+        }
+
+        .instructions h3 {
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+
+        .instructions ol {
+            list-style: none;
+            counter-reset: steps;
+        }
+
+        .instructions li {
+            counter-increment: steps;
+            padding: 12px 0;
+            padding-left: 40px;
+            position: relative;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .instructions li:last-child {
+            border-bottom: none;
+        }
+
+        .instructions li::before {
+            content: counter(steps);
+            position: absolute;
+            left: 0;
+            width: 24px;
+            height: 24px;
+            background: var(--accent);
+            color: var(--bg-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 18px 40px;
+            background: var(--accent);
+            border: none;
+            border-radius: 12px;
+            color: var(--bg-primary);
+            font-weight: 700;
+            font-size: 16px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(0, 255, 136, 0.3);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 18px 40px;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 16px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .status-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .status-text.checking {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .error {
+            color: #ff3366;
+            background: rgba(255, 51, 102, 0.1);
+            border: 1px solid rgba(255, 51, 102, 0.3);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .copied-toast {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--accent);
+            color: var(--bg-primary);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .copied-toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 2px;
+            width: 0%;
+            animation: progress 30s linear forwards;
+        }
+
+        @keyframes progress {
+            to { width: 100%; }
+        }
+
+        @media (max-width: 576px) {
+            .success-card {
+                padding: 32px 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .promo-code {
+                font-size: 20px;
+                padding: 12px 16px;
+            }
+
+            .btn-primary, .btn-secondary {
+                padding: 16px 24px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-card">
+            <div id="content">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Checking payment status...</p>
+                    <p class="status-text checking">This may take a few moments</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="copied-toast" id="copiedToast">Copied to clipboard!</div>
+
+    <script>
+        // Payment server URL
+        const PAYMENT_SERVER = 'https://shadowprotocol.trade/api';
+
+        let checkCount = 0;
+        const maxChecks = 60; // Check for up to 5 minutes (60 * 5s)
+        let checkInterval;
+
+        async function checkPaymentStatus() {
+            // Get payment ID from localStorage or URL
+            const params = new URLSearchParams(window.location.search);
+            let paymentId = params.get('NP_id') || localStorage.getItem('pending_payment_id');
+            let plan = params.get('plan') || localStorage.getItem('pending_payment_plan') || 'pro';
+
+            if (!paymentId) {
+                showError('No payment found. Please try again.');
+                return;
+            }
+
+            checkCount++;
+
+            try {
+                const response = await fetch(`${PAYMENT_SERVER}/check-payment?payment_id=${paymentId}`);
+                const data = await response.json();
+
+                if (data.status === 'completed' && data.promo_code) {
+                    // Payment confirmed!
+                    clearInterval(checkInterval);
+                    localStorage.removeItem('pending_payment_id');
+                    localStorage.removeItem('pending_payment_plan');
+                    showSuccess(data.promo_code, data.plan);
+                } else if (data.status === 'failed' || data.status === 'expired') {
+                    clearInterval(checkInterval);
+                    showError('Payment failed or expired. Please try again.');
+                } else if (checkCount >= maxChecks) {
+                    clearInterval(checkInterval);
+                    showPending(paymentId);
+                }
+                // Otherwise keep checking...
+
+            } catch (error) {
+                console.error('Error checking payment:', error);
+                if (checkCount >= maxChecks) {
+                    clearInterval(checkInterval);
+                    showPending(paymentId);
+                }
+            }
+        }
+
+        function showSuccess(promoCode, plan) {
+            const planName = plan === 'elite' ? 'ELITE' : 'PRO';
+            const days = plan === 'elite' ? 30 : 30;
+            const content = document.getElementById('content');
+
+            content.innerHTML = `
+                <div class="success-icon">&#10003;</div>
+                <h1>Payment Confirmed!</h1>
+                <p class="subtitle">Thank you for subscribing to Shadow Protocol ${planName}</p>
+
+                <div class="promo-section">
+                    <div class="promo-label">Your Activation Code</div>
+                    <div class="promo-code" onclick="copyCode('${promoCode}')" title="Click to copy">
+                        ${promoCode}
+                    </div>
+                    <p class="promo-hint">Click to copy - Valid for ${days} days</p>
+                </div>
+
+                <div class="instructions">
+                    <h3>How to activate:</h3>
+                    <ol>
+                        <li>Open our Telegram bot</li>
+                        <li>Click "Enter Promo Code"</li>
+                        <li>Paste your code: <strong>${promoCode}</strong></li>
+                        <li>Get instant access to ${planName} signals!</li>
+                    </ol>
+                </div>
+
+                <a href="https://t.me/protocolshadow_bot" target="_blank" class="btn-primary">
+                    <span>Open Telegram Bot</span>
+                    <span>&#8594;</span>
+                </a>
+            `;
+        }
+
+        function showPending(paymentId) {
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <div class="success-icon pending-icon">&#8987;</div>
+                <h1>Payment Processing</h1>
+                <p class="subtitle">Your payment is being confirmed on the blockchain. This usually takes 1-10 minutes.</p>
+
+                <div class="instructions">
+                    <h3>What happens next:</h3>
+                    <ol>
+                        <li>Blockchain confirms your transaction</li>
+                        <li>Your promo code is generated automatically</li>
+                        <li>Refresh this page or check Telegram bot</li>
+                    </ol>
+                </div>
+
+                <button class="btn-primary" onclick="location.reload()">
+                    <span>Check Again</span>
+                    <span>&#8635;</span>
+                </button>
+                <a href="https://t.me/protocolshadow_bot" target="_blank" class="btn-secondary">
+                    <span>Contact Support</span>
+                </a>
+            `;
+        }
+
+        function showError(message) {
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <div class="success-icon" style="background: rgba(255,51,102,0.1); border-color: #ff3366;">&#10007;</div>
+                <h1>Something went wrong</h1>
+                <div class="error">${message}</div>
+                <a href="/#pricing" class="btn-primary" style="background: #ff3366;">
+                    Try Again
+                </a>
+                <a href="https://t.me/protocolshadow_bot" target="_blank" class="btn-secondary">
+                    Contact Support
+                </a>
+            `;
+        }
+
+        function copyCode(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                const toast = document.getElementById('copiedToast');
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2000);
+            });
+        }
+
+        // Start checking payment status
+        checkPaymentStatus();
+        checkInterval = setInterval(checkPaymentStatus, 5000); // Check every 5 seconds
+    </script>
+</body>
+</html>
