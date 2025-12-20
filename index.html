@@ -1423,9 +1423,6 @@
         @media (max-width: 992px) {
             .cursor, .cursor-dot { display: none; }
             body { cursor: auto; }
-            .pricing-grid { grid-template-columns: 1fr; max-width: 450px; }
-            .pricing-card.popular { transform: none; }
-            .pricing-card.popular:hover { transform: translateY(-4px); }
             .hero-content { grid-template-columns: 1fr; text-align: center; }
             .hero-subtitle { margin: 0 auto 48px; }
             .hero-buttons { justify-content: center; }
@@ -1648,6 +1645,34 @@
             margin: 0 auto;
         }
 
+        /* Tablet landscape - 2 columns */
+        @media (max-width: 1024px) {
+            .pricing-grid {
+                grid-template-columns: repeat(2, 1fr);
+                max-width: 700px;
+            }
+            /* Move popular card to top and span full width on 2-col */
+            .pricing-card.popular {
+                order: -1;
+                grid-column: 1 / -1;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+        }
+
+        /* Tablet portrait & mobile - 1 column */
+        @media (max-width: 768px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                gap: 20px;
+            }
+            .pricing-card.popular {
+                grid-column: auto;
+                max-width: none;
+            }
+        }
+
         .pricing-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
@@ -1658,9 +1683,21 @@
             position: relative;
         }
 
+        @media (max-width: 768px) {
+            .pricing-card {
+                padding: 32px 24px;
+            }
+        }
+
         .pricing-card.popular {
             border-color: var(--accent);
             transform: scale(1.05);
+        }
+
+        @media (max-width: 1024px) {
+            .pricing-card.popular {
+                transform: none;
+            }
         }
 
         .pricing-card.popular::before {
@@ -1688,6 +1725,13 @@
             transform: scale(1.05) translateY(-8px);
         }
 
+        @media (max-width: 1024px) {
+            .pricing-card:hover,
+            .pricing-card.popular:hover {
+                transform: translateY(-4px);
+            }
+        }
+
         .pricing-name {
             font-size: 20px;
             font-weight: 600;
@@ -1702,6 +1746,12 @@
             font-family: 'JetBrains Mono', monospace;
         }
 
+        @media (max-width: 768px) {
+            .pricing-price {
+                font-size: 44px;
+            }
+        }
+
         .pricing-price span {
             font-size: 18px;
             font-weight: 400;
@@ -1714,10 +1764,22 @@
             margin-bottom: 32px;
         }
 
+        @media (max-width: 768px) {
+            .pricing-desc {
+                margin-bottom: 24px;
+            }
+        }
+
         .pricing-features {
             list-style: none;
             text-align: left;
             margin-bottom: 32px;
+        }
+
+        @media (max-width: 768px) {
+            .pricing-features {
+                margin-bottom: 24px;
+            }
         }
 
         .pricing-features li {
@@ -1728,6 +1790,13 @@
             display: flex;
             align-items: center;
             gap: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .pricing-features li {
+                padding: 10px 0;
+                font-size: 13px;
+            }
         }
 
         .pricing-features li::before {
